@@ -7,6 +7,7 @@ package codigo;
 
 import java.awt.Image;
 import java.net.URL;
+import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -16,7 +17,9 @@ import javax.swing.JButton;
  */
 public class VentanaAhorcado extends javax.swing.JFrame {
     
-    String palabraOculta = "CETYS";
+    String palabraOculta = "PLATAOPOLOMO";
+    
+    String [] listaDePalabras;
     
     int numeroFallos = 0;
     /**
@@ -24,10 +27,37 @@ public class VentanaAhorcado extends javax.swing.JFrame {
      */
     public VentanaAhorcado() {
         initComponents();
-        
+        eligePalabraOculta();    
         //Sibuja la imagen del ahorcado
         dibujaimagen(0);
+        
+        //Dibujo los guiones de la palabra a adividnar
+        ponGuiones();
     }
+    private void eligePalabraOculta(){
+     //Inicializo las palabras ocultas que guardare en el array
+      
+        listaDePalabras = new String [] {"CETYS", "MERCURIO0", "VENUS", "TIERRA", "MARTE", "JUPITER", "SATURNO", "URANO", "NEPTUNO", "PLUTON"};
+        
+        //Elijo una de ls palabras del array de manera aleatoria
+        Random aleatorio = new Random();
+        int posicionElegida = aleatorio.nextInt(listaDePalabras.length);
+        
+        palabraOculta = listaDePalabras [posicionElegida];
+    }
+    
+    private void ponGuiones(){
+        //crea un nuevo string con tantos guiones bajos y estpacios como letras tenga la palabra ocualta a adivinar
+        String palabraConGuiones = "";
+        
+        for(int i = 0; i <palabraOculta.length(); i++){
+        
+        palabraConGuiones = palabraConGuiones + "_ ";
+        }
+         pantalla.setText(palabraConGuiones);
+       
+    }
+    
     private void dibujaimagen(int numeroFallos){
         ImageIcon miImagen = null;
         URL nombreImagen = null;
@@ -42,6 +72,7 @@ public class VentanaAhorcado extends javax.swing.JFrame {
             case 3: nombreImagen = getClass().getResource("/Imagenes/ahorcado_3.png");break;
             case 4: nombreImagen = getClass().getResource("/Imagenes/ahorcado_4.png");break;
             case 5: nombreImagen = getClass().getResource("/Imagenes/ahorcado_5.png");break;
+            case -1: nombreImagen = getClass().getResource("/Imagenes/acertasteTodo.png");break;
             default:nombreImagen = getClass().getResource("/Imagenes/ahorcado_fin.png");
             }
         
@@ -72,7 +103,9 @@ public class VentanaAhorcado extends javax.swing.JFrame {
             numeroFallos ++;
             dibujaimagen(numeroFallos);
         }
-        
+        if(!pantalla.getText().contains("_")){
+            dibujaimagen(-1);
+        }     
     }
     
     private void chequeaBoton(JButton miBoton){
